@@ -75,6 +75,7 @@ function App() {
   const isMobile = isMobileScreen && !platform.isElectron;
   const copyToWechat = useEditorStore((state) => state.copyToWechat);
   const copyAsHtml = useEditorStore((state) => state.copyAsHtml);
+  const exportLongImage = useEditorStore((state) => state.exportLongImage);
   const [showThemePanel, setShowThemePanel] = useState(false);
 
   // 自定义主题真源在工作区文件夹，副作用单点启用
@@ -354,6 +355,7 @@ function App() {
               onViewChange={setActiveView}
               onCopyToWechat={copyToWechat}
               onCopyAsHtml={copyAsHtml}
+              onExportLongImage={exportLongImage}
               onOpenTheme={() => setShowThemePanel(true)}
             />
           )}

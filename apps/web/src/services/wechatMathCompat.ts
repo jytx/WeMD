@@ -7,7 +7,7 @@ import {
 
 const MATHJAX_LOAD_TIMEOUT_MS = 4000;
 
-interface MathImageRenderResult {
+export interface MathImageRenderResult {
   imageCount: number;
   fallbackCount: number;
 }

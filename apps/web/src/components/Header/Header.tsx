@@ -1,6 +1,7 @@
 import { useState, useEffect, lazy, Suspense } from "react";
 import { useEditorStore } from "../../store/editorStore";
 import "./Header.css";
+import { HeaderExportMenu } from "./HeaderExportMenu";
 
 const ThemePanel = lazy(() =>
   import("../Theme/ThemePanel").then((m) => ({ default: m.ThemePanel })),
@@ -26,6 +27,7 @@ import {
   Send,
   Code,
   ImageIcon,
+  ImageDown,
   Sun,
   Moon,
   ChevronsUp,
@@ -38,7 +40,7 @@ import { Modal, FloatingToolbarButton, WindowControls } from "../common";
 import { AI_SETTINGS_OPEN_EVENT } from "../../services/ai/aiConfig";
 
 export function Header() {
-  const { copyToWechat, copyAsHtml } = useEditorStore();
+  const { copyToWechat, copyAsHtml, exportLongImage } = useEditorStore();
   const [showThemePanel, setShowThemePanel] = useState(false);
   const [showStorageModal, setShowStorageModal] = useState(false);
   const [showImageHostModal, setShowImageHostModal] = useState(false);
@@ -132,6 +134,11 @@ export function Header() {
             onClick={copyAsHtml}
           />
           <FloatingToolbarButton
+            icon={<ImageDown size={18} strokeWidth={2} />}
+            label="导出长图"
+            onClick={exportLongImage}
+          />
+          <FloatingToolbarButton
             icon={<Send size={18} strokeWidth={2} />}
             label="复制到公众号"
             onClick={copyToWechat}
@@ -206,14 +213,10 @@ export function Header() {
                 <Moon size={18} strokeWidth={2} />
               )}
             </button>
-            <button
-              className="btn-secondary header-action-button header-action-secondary"
-              onClick={copyAsHtml}
-              aria-label="复制 HTML"
-            >
-              <Code size={18} strokeWidth={2} />
-              <span>复制 HTML</span>
-            </button>
+            <HeaderExportMenu
+              onCopyAsHtml={copyAsHtml}
+              onExportLongImage={exportLongImage}
+            />
 
             <button
               className="btn-primary header-action-button header-action-primary"

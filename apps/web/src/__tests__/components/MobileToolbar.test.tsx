@@ -15,6 +15,7 @@ describe("MobileToolbar", () => {
         onViewChange={onViewChange}
         onCopyToWechat={onCopyToWechat}
         onCopyAsHtml={onCopyAsHtml}
+        onExportLongImage={vi.fn()}
         onOpenTheme={onOpenTheme}
       />,
     );
@@ -37,6 +38,7 @@ describe("MobileToolbar", () => {
         onViewChange={onViewChange}
         onCopyToWechat={onCopyToWechat}
         onCopyAsHtml={onCopyAsHtml}
+        onExportLongImage={vi.fn()}
         onOpenTheme={onOpenTheme}
       />,
     );

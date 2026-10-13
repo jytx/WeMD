@@ -24,6 +24,7 @@ import {
 import {
   renderHighRiskMathAsImages,
   stripHiddenMathMarkupForWechat,
+  type MathImageRenderResult,
 } from "./wechatMathCompat";
 import { renderMermaidBlocks } from "./wechatMermaidRenderer";
 import { renderTableBlocks } from "./wechatTableRenderer";
@@ -33,6 +34,19 @@ export { normalizeCopyContainer, stripCopyMetadata };
 
 interface CopyToWechatOptions {
   showMacBar?: boolean;
+}
+
+export interface WechatContainerOptions extends CopyToWechatOptions {
+  /** 渲染宽度：复制沿用 760px，长图用手机宽度 */
+  width?: string;
+  /** 不传时沿用用户的表格换行偏好 */
+  tableWrap?: boolean;
+}
+
+export interface RenderedWechatContainer {
+  container: HTMLDivElement;
+  requiresExactHtmlTransport: boolean;
+  mathFallback: MathImageRenderResult;
 }
 
 const buildCopyCss = (themeCss: string) => {
@@ -233,16 +247,20 @@ const shouldPreferElectronClipboard = (): boolean => {
 
 // ── 主编排流程 ──────────────────────────────────────
 
-export async function copyToWechat(
+/**
+ * 渲染复制与长图共用的最终 HTML 容器（已挂到 body、离屏、强制亮色）。
+ * 调用方负责在用完后移除 container。
+ */
+export async function renderWechatContainer(
   markdown: string,
   css: string,
-  options: CopyToWechatOptions = {},
-): Promise<void> {
+  options: WechatContainerOptions = {},
+): Promise<RenderedWechatContainer> {
   const container = document.createElement("div");
   container.style.position = "fixed";
   container.style.top = "0";
   container.style.left = "0";
-  container.style.width = "760px";
+  container.style.width = options.width ?? "760px";
   container.style.opacity = "0";
   container.style.pointerEvents = "none";
   container.style.zIndex = "-1";
@@ -276,9 +294,30 @@ export async function copyToWechat(
     const mathFallback = await renderHighRiskMathAsImages(container);
     stripHiddenMathMarkupForWechat(container);
     await renderMermaidBlocks(container);
-    await renderTableBlocks(container, getPublishingPreference("tableWrap"));
+    await renderTableBlocks(
+      container,
+      options.tableWrap ?? getPublishingPreference("tableWrap"),
+    );
     renderMacSignDotsToImages(container);
     const { requiresExactHtmlTransport } = normalizeCopyContainer(container);
+    return { container, requiresExactHtmlTransport, mathFallback };
+  } catch (error) {
+    container.remove();
+    throw error;
+  }
+}
+
+export async function copyToWechat(
+  markdown: string,
+  css: string,
+  options: CopyToWechatOptions = {},
+): Promise<void> {
+  let container: HTMLDivElement | null = null;
+
+  try {
+    const rendered = await renderWechatContainer(markdown, css, options);
+    container = rendered.container;
+    const { requiresExactHtmlTransport, mathFallback } = rendered;
 
     let copied = false;
 
@@ -350,6 +389,6 @@ export async function copyToWechat(
     toast.error(`复制失败: ${errorMsg}`);
     throw error;
   } finally {
-    document.body.removeChild(container);
+    container?.remove();
   }
 }

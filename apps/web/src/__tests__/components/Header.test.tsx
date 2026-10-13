@@ -36,6 +36,7 @@ describe("Header", () => {
   // Default mocks
   const mockCopyToWechat = vi.fn();
   const mockCopyAsHtml = vi.fn();
+  const mockExportLongImage = vi.fn();
   const mockSetTheme = vi.fn();
   const mockMinimize = vi.fn();
   const mockMaximize = vi.fn();
@@ -84,6 +85,7 @@ describe("Header", () => {
     vi.mocked(useEditorStore).mockReturnValue({
       copyToWechat: mockCopyToWechat,
       copyAsHtml: mockCopyAsHtml,
+      exportLongImage: mockExportLongImage,
     });
 
     vi.mocked(useUITheme).mockImplementation(
@@ -134,11 +136,34 @@ describe("Header", () => {
     expect(mockCopyToWechat).toHaveBeenCalled();
   });
 
-  it("calls copyAsHtml action", () => {
+  it("triggers export actions from the export menu and closes it", () => {
     render(<Header />);
+    const trigger = screen.getByRole("button", { name: "导出" });
 
-    fireEvent.click(screen.getByText("复制 HTML"));
-    expect(mockCopyAsHtml).toHaveBeenCalled();
+    fireEvent.click(trigger);
+    fireEvent.click(screen.getByRole("menuitem", { name: "复制 HTML" }));
+    expect(mockCopyAsHtml).toHaveBeenCalledTimes(1);
+    expect(screen.queryByRole("menu")).not.toBeInTheDocument();
+
+    fireEvent.click(trigger);
+    fireEvent.click(screen.getByRole("menuitem", { name: "导出长图" }));
+    expect(mockExportLongImage).toHaveBeenCalledTimes(1);
+    expect(screen.queryByRole("menu")).not.toBeInTheDocument();
+  });
+
+  it("closes the export menu on Escape and outside click", () => {
+    render(<Header />);
+    const trigger = screen.getByRole("button", { name: "导出" });
+
+    fireEvent.click(trigger);
+    expect(trigger).toHaveAttribute("aria-expanded", "true");
+    fireEvent.keyDown(document, { key: "Escape" });
+    expect(screen.queryByRole("menu")).not.toBeInTheDocument();
+
+    fireEvent.click(trigger);
+    fireEvent.mouseDown(document.body);
+    expect(screen.queryByRole("menu")).not.toBeInTheDocument();
+    expect(mockCopyAsHtml).not.toHaveBeenCalled();
   });
 
   it("opens article theme panel from the compact navigation", async () => {

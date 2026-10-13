@@ -3,6 +3,7 @@ import { create } from "zustand";
 import { useThemeStore } from "./themeStore";
 import { copyToWechat as execCopyToWechat } from "../services/wechatCopyService";
 import { copyAsHtml as execCopyAsHtml } from "../services/htmlCopyService";
+import { exportLongImage as execExportLongImage } from "../services/longImageExportService";
 
 export interface ResetOptions {
   markdown?: string;
@@ -28,7 +29,19 @@ interface EditorStore {
   resetDocument: (options?: ResetOptions) => void;
   copyToWechat: () => void;
   copyAsHtml: () => void;
+  exportLongImage: () => void;
 }
+
+// 复制与长图共用当前主题的 CSS 和 Mac 顶栏设置
+const getActiveThemeRenderOptions = () => {
+  const themeStore = useThemeStore.getState();
+  const css = themeStore.getThemeCSS(themeStore.themeId);
+  const currentTheme =
+    themeStore.customThemes.find((t) => t.id === themeStore.themeId) ||
+    themeStore.getAllThemes().find((t) => t.id === themeStore.themeId);
+  const showMacBar = currentTheme?.designerVariables?.showMacBar ?? false;
+  return { css, showMacBar };
+};
 
 export const defaultMarkdown = `# 欢迎使用 WeMD
 
@@ -181,12 +194,7 @@ export const useEditorStore = create<EditorStore>((set, get) => ({
 
   copyToWechat: async () => {
     const { markdown } = get();
-    const themeStore = useThemeStore.getState();
-    const css = themeStore.getThemeCSS(themeStore.themeId);
-    const currentTheme =
-      themeStore.customThemes.find((t) => t.id === themeStore.themeId) ||
-      themeStore.getAllThemes().find((t) => t.id === themeStore.themeId);
-    const showMacBar = currentTheme?.designerVariables?.showMacBar ?? false;
+    const { css, showMacBar } = getActiveThemeRenderOptions();
 
     try {
       await execCopyToWechat(markdown, css, { showMacBar });
@@ -198,5 +206,10 @@ export const useEditorStore = create<EditorStore>((set, get) => ({
   copyAsHtml: async () => {
     const { markdown } = get();
     await execCopyAsHtml(markdown);
+  },
+
+  exportLongImage: async () => {
+    const { css, showMacBar } = getActiveThemeRenderOptions();
+    await execExportLongImage(get().markdown, css, { showMacBar });
   },
 }));
