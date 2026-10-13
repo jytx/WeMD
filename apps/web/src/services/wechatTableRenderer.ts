@@ -16,6 +16,23 @@ const TABLE_LAYOUT_STYLES = {
 
 const originalCellMinWidths = new WeakMap<HTMLElement, string>();
 
+/** 自动换行时，宽度不超过约 5 个汉字（10 个半角字符）的单元格保持一行 */
+const SHORT_CELL_MAX_WIDTH = 10;
+
+/**
+ * 按显示宽度判断短单元格：全角字符计 2，其余计 1。
+ * overflow-wrap:anywhere 会把列的最小宽度压到一个字，
+ * 自动布局随之把短标签列挤成一字一行，短单元格不折行可避免。
+ */
+const isShortCell = (text: string): boolean => {
+  let width = 0;
+  for (const ch of text.trim()) {
+    width += /[\u2e80-\uffef]/.test(ch) ? 2 : 1;
+    if (width > SHORT_CELL_MAX_WIDTH) return false;
+  }
+  return true;
+};
+
 /**
  * 覆盖表格布局参数，保留主题色彩与主题字号。
  * 自动换行时暂时解除主题列宽约束，关闭后恢复原始内联值。
@@ -36,7 +53,8 @@ const applyTableLayoutStyles = (
     const el = cell as HTMLElement;
     el.style.lineHeight = TABLE_LAYOUT_STYLES.lineHeight;
     el.style.padding = TABLE_LAYOUT_STYLES.cellPadding;
-    el.style.whiteSpace = wrapEnabled ? "normal" : "nowrap";
+    const keepOneLine = !wrapEnabled || isShortCell(el.textContent ?? "");
+    el.style.whiteSpace = keepOneLine ? "nowrap" : "normal";
     el.style.overflowWrap = wrapEnabled ? "anywhere" : "";
     el.style.wordBreak = wrapEnabled ? "break-word" : "";
     if (wrapEnabled) {

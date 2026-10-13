@@ -66,4 +66,25 @@ describe("wechatTableRenderer", () => {
     expect(cell.style.overflowWrap).toBe("");
     expect(cell.style.wordBreak).toBe("");
   });
+
+  it("自动换行时短单元格保持一行，长单元格照常换行", async () => {
+    const container = document.createElement("div");
+    container.innerHTML = `
+      <div class="table-container">
+        <table><tbody><tr>
+          <td>负责的工作</td><td>gitee-pr</td><td>负责的工作呀</td><td>gitee-release</td>
+        </tr></tbody></table>
+      </div>
+    `;
+
+    await renderTableBlocksForPreview(container, true);
+
+    const cells = [...container.querySelectorAll("td")] as HTMLElement[];
+    expect(cells.map((cell) => cell.style.whiteSpace)).toEqual([
+      "nowrap",
+      "nowrap",
+      "normal",
+      "normal",
+    ]);
+  });
 });
