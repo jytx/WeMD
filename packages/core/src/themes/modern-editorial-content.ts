@@ -86,7 +86,9 @@ export const modernEditorialContentTheme = `/* 行内强调 */
 
 /* 行内代码 */
 #wemd p code,
-#wemd li code {
+#wemd li code,
+#wemd td code,
+#wemd th code {
   margin: 0 2px;
   padding: 2px 6px;
   border: 1px solid #d2d1c7;

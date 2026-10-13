@@ -245,7 +245,9 @@ export const receiptTheme = `/* 购物小票风格 */
 
 /* 行内代码 - 反色打印块 */
 #wemd p code,
-#wemd li code {
+#wemd li code,
+#wemd td code,
+#wemd th code {
     background: #000;
     color: #fff;
     font-family: monospace;

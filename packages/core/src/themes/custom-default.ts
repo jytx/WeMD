@@ -251,7 +251,7 @@ export const customDefaultTheme = `/* 默认主题 · 翡翠刊读
 }
 
 /* 行内代码：浅翡翠底 + 翡翠墨字 */
-#wemd p code, #wemd li code {
+#wemd p code, #wemd li code, #wemd td code, #wemd th code {
   background: #eef6f1;
   padding: 2px 6px;
   border-radius: 4px;

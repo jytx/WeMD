@@ -304,7 +304,9 @@ export const templateTheme = `/*
  * 注意：行内代码在段落和列表项中
  */
 #wemd p code,
-#wemd li code {
+#wemd li code,
+#wemd td code,
+#wemd th code {
     color: #e83e8c;
     /* 文字颜色 */
     background: #f8f9fa;

@@ -249,7 +249,9 @@ export const cyberpunkNeonTheme = `/* 赛博朋克风格 */
  * 纯黑底 + 青色字 + 等宽字体 + 微发光
  */
 #wemd p code,
-#wemd li code {
+#wemd li code,
+#wemd td code,
+#wemd th code {
     color: #00F3FF;
     /* 霓虹青 */
     background: #000000;

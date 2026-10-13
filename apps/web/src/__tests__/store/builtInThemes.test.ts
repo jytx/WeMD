@@ -1,9 +1,11 @@
 import { describe, expect, it } from "vitest";
 import {
   clearGuideTheme,
+  createMarkdownParser,
   dataBlueprintTheme,
   easternNotesTheme,
   modernEditorialTheme,
+  processHtml,
   whitespaceGalleryTheme,
 } from "@wemd/core";
 import { builtInThemes } from "../../store/themes/builtInThemes";
@@ -90,6 +92,27 @@ describe("built-in themes", () => {
       expect(theme?.css, themeId).not.toMatch(
         /#wemd \.hljs-number,[\s\S]*?#wemd \.hljs-literal,[\s\S]*?color:\s*#008080;/,
       );
+    }
+  });
+
+  it("表格单元格中的行内代码与正文行内代码样式一致", () => {
+    const markdown = "正文 `npm i`\n\n| `npm i` |\n| --- |\n| `npm i` |";
+    const html = createMarkdownParser({}).render(markdown);
+
+    for (const theme of builtInThemes) {
+      const container = document.createElement("div");
+      container.innerHTML = processHtml(html, theme.css, true, true);
+      const paragraphStyle = container
+        .querySelector("p code")
+        ?.getAttribute("style");
+
+      expect(paragraphStyle, theme.id).toBeTruthy();
+      for (const cell of ["th", "td"]) {
+        expect(
+          container.querySelector(`${cell} code`)?.getAttribute("style"),
+          `${theme.id} ${cell}`,
+        ).toBe(paragraphStyle);
+      }
     }
   });
 });

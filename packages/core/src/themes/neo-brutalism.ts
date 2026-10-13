@@ -335,7 +335,9 @@ export const neoBrutalismTheme = `/* 新粗野主义风格 */
 
 /* 行内代码 - 复古终端风 */
 #wemd p code,
-#wemd li code {
+#wemd li code,
+#wemd td code,
+#wemd th code {
     color: #000;
     background: #fff;
     border: 1px solid #000;

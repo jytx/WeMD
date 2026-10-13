@@ -236,7 +236,9 @@ export const basicTheme = `/* 默认样式，最佳实践 */
 
 /* 行内代码 */
 #wemd p code,
-#wemd li code {
+#wemd li code,
+#wemd td code,
+#wemd th code {
   font-size: 14px;
   word-wrap: break-word;
   padding: 2px 4px;

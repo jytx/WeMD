@@ -232,7 +232,9 @@ export const clearGuideTheme = `/* 清晰指南：教程与操作手册 */
 }
 
 #wemd p code,
-#wemd li code {
+#wemd li code,
+#wemd td code,
+#wemd th code {
   padding: 2px 6px;
   border: 1px solid #b9d0cd;
   color: #075f58;

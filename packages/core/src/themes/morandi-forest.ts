@@ -260,7 +260,9 @@ export const morandiForestTheme = `/* 莫兰迪森林风格 */
 
 /* 行内代码 */
 #wemd p code,
-#wemd li code {
+#wemd li code,
+#wemd td code,
+#wemd th code {
   color: #4F6F52;
   background: #EDF1EE;
   border: none;

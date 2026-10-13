@@ -275,7 +275,9 @@ export const luxuryGoldTheme = `/* 黑金奢华风格 */
  * 极淡的金色背景 + 细边框，精致感拉满
  */
 #wemd p code,
-#wemd li code {
+#wemd li code,
+#wemd td code,
+#wemd th code {
     color: #9E8045;
     /* 深金色文字 */
     background: rgba(158, 128, 69, 0.06);

@@ -296,7 +296,9 @@ export const knowledgeBaseTheme = `/* 知识库风格 */
  * 行内代码 - 经典的红字灰底
  */
 #wemd p code,
-#wemd li code {
+#wemd li code,
+#wemd td code,
+#wemd th code {
     color: #EB5757;
     /* 红色文字 */
     background: rgba(135, 131, 120, 0.15);

@@ -214,7 +214,9 @@ export const whitespaceGalleryTheme = `/* 留白画册：图片与人物故事 *
 }
 
 #wemd p code,
-#wemd li code {
+#wemd li code,
+#wemd td code,
+#wemd th code {
   padding: 2px 5px;
   border-bottom: 1px solid #a7a29d;
   color: #5c4740;

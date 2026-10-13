@@ -231,7 +231,9 @@ export const dataBlueprintTheme = `/* 数据蓝图：商业分析与数据复盘
 }
 
 #wemd p code,
-#wemd li code {
+#wemd li code,
+#wemd td code,
+#wemd th code {
   padding: 2px 6px;
   border: 1px solid #c7d2df;
   color: #174f8f;

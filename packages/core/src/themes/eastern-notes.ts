@@ -253,7 +253,9 @@ export const easternNotesTheme = `/* 东方笺谱：现代人文长文 */
 }
 
 #wemd p code,
-#wemd li code {
+#wemd li code,
+#wemd td code,
+#wemd th code {
   padding: 2px 6px;
   border: 1px solid #d4cbc3;
   color: #8c3025;

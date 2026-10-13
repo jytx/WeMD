@@ -224,7 +224,9 @@ export const academicPaperTheme = `/* 学术论文风格 */
  * 纯黑文字 + 极淡灰底 + 等宽字体
  */
 #wemd p code,
-#wemd li code {
+#wemd li code,
+#wemd td code,
+#wemd th code {
     color: #000;
     /* 纯黑 */
     background: #f4f4f4;

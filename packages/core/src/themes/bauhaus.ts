@@ -236,7 +236,9 @@ export const bauhausTheme = `/* 包豪斯风格 */
  * 亮黄背景 + 黑色文字 + 粗体
  */
 #wemd p code,
-#wemd li code {
+#wemd li code,
+#wemd td code,
+#wemd th code {
     background: #FBC02D;
     /* 包豪斯黄 */
     color: #000;

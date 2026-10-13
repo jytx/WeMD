@@ -303,7 +303,9 @@ export const sunsetFilmTheme = `/* 落日胶片风格 */
 
 /* 行内代码 - 咖啡色块 */
 #wemd p code,
-#wemd li code {
+#wemd li code,
+#wemd td code,
+#wemd th code {
     color: #5D4037;
     background: #EFE6D5;
     border: none;

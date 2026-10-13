@@ -262,7 +262,9 @@ export const auroraGlassTheme = `/* 极光玻璃风格 */
 
 /* 行内代码 - 气泡风格 */
 #wemd p code,
-#wemd li code {
+#wemd li code,
+#wemd td code,
+#wemd th code {
   color: #4158D0;
   background: #f0f2ff;
   border: 1px solid rgba(65, 88, 208, 0.1);
