@@ -534,12 +534,6 @@ const normalizeWechatSpecRules = (container: HTMLElement): void => {
     node.style.removeProperty("caret-color");
     if (node.style.length === 0) node.removeAttribute("style");
   });
-  container.querySelectorAll<HTMLElement>("pre > code").forEach((code) => {
-    code.style.whiteSpace = "pre-wrap";
-    code.style.minWidth = "0";
-    code.style.overflowWrap = "anywhere";
-    code.style.wordBreak = "break-word";
-  });
 
   container.querySelectorAll<SVGElement>("[begin]").forEach((node) => {
     if (

@@ -458,19 +458,18 @@ describe("wechatCopyNormalizer", () => {
     expect(container.querySelector("#timed")?.getAttribute("begin")).toBe("2s");
   });
 
-  it("wraps long code lines without losing preformatted whitespace", () => {
+  it("keeps long code lines on one line for horizontal scrolling", () => {
     const container = document.createElement("div");
     container.innerHTML =
-      '<section id="wemd"><pre><code style="white-space:pre;min-width:max-content;">  const value = "long";</code></pre></section>';
+      '<section id="wemd"><pre style="overflow-x:auto;"><code style="white-space:pre;min-width:max-content;">  const value = "long";</code></pre></section>';
 
     normalizeCopyContainer(container);
 
     const code = container.querySelector("pre > code") as HTMLElement;
     expect(code.textContent).toBe('  const value = "long";');
-    expect(code.style.whiteSpace).toBe("pre-wrap");
-    expect(code.style.minWidth).toBe("0");
-    expect(code.style.overflowWrap).toBe("anywhere");
-    expect(code.style.wordBreak).toBe("break-word");
+    expect(code.style.whiteSpace).toBe("pre");
+    expect(code.style.minWidth).toBe("max-content");
+    expect(code.parentElement?.style.overflowX).toBe("auto");
   });
 
   it("adds data-w only when an image has a known natural width", () => {
