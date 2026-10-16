@@ -310,6 +310,16 @@ export function IndexedHistoryPanel() {
                           <input
                             value={tempTitle}
                             onChange={(e) => setTempTitle(e.target.value)}
+                            onKeyDown={(e) => {
+                              if (e.key === "Enter") {
+                                // 可选：防止意外提交外层表单
+                                e.preventDefault();
+                                confirmRename(entry);
+                              } else if (e.key === "Escape") {
+                                // 顺手支持 ESC 取消
+                                setRenamingId(null);
+                              }
+                            }}
                             autoFocus
                           />
                           <button onClick={() => confirmRename(entry)}>
