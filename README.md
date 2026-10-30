@@ -113,6 +113,14 @@ docker compose up -d
 WEMD_IMAGE=ghcr.io/tenngoxars/wemd-web:<版本号> docker compose up -d
 ```
 
+#### 使用「本地文件夹」存储
+
+浏览器只在 HTTPS 或 `localhost` 下开放读写本地文件夹的能力，且需要 Chrome、Edge 等 Chromium 内核浏览器。通过 `http://服务器IP:8080` 访问时，存储模式里的「本地文件夹」不可用，只能使用浏览器存储。
+
+- **部署在自己电脑上**：用 `http://localhost:8080` 访问即可。
+- **部署在服务器上，有域名**：用 Caddy、Nginx 等反向代理配置 HTTPS。
+- **只在局域网使用，没有域名**：在 Chrome 打开 `chrome://flags/#unsafely-treat-insecure-origin-as-secure`，填入 `http://服务器IP:8080` 并重启浏览器。每台电脑需单独设置。
+
 ---
 
 ## 🛠️ 本地开发
