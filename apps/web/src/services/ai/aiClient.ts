@@ -4,6 +4,7 @@
 import {
   buildProviderExtras,
   type AiConfig,
+  type AiProviderId,
   resolveChatCompletionsUrl,
 } from "./aiConfig";
 
@@ -204,10 +205,13 @@ const NON_CHAT_TOKENS = [
   // 其他非对话用途
   "moderation",
   "guard",
+  // 翻译专用：只收 user 消息且必须带 translation_options，接不住写作请求
+  "qwen-mt",
 ];
 
+// 点号也算分隔符：FLUX.1-schnell、FLUX.2-dev 这类名字的类型词后面紧跟版本点号
 const NON_CHAT_PATTERN = new RegExp(
-  `(^|[-/_])(${NON_CHAT_TOKENS.join("|")})([-/_]|$)`,
+  `(^|[-/_.])(${NON_CHAT_TOKENS.join("|")})([-/_.]|$)`,
   "i",
 );
 
@@ -243,6 +247,13 @@ export interface FetchModelsOptions {
   fetchImpl?: typeof fetch;
 }
 
+// 这两家的 /models 默认混有生图、语音、视频等模型，用各自官方的类型参数只取对话模型；
+// 其余服务商列表本就只有对话模型，或已声明 output_modalities，再由 isChatModel 兜底
+const CHAT_MODELS_QUERY: Partial<Record<AiProviderId, string>> = {
+  siliconflow: "?sub_type=chat",
+  moark: "?type=text2text",
+};
+
 // 不是所有兼容端点都实现了 /models，失败沿用同一套分类，由调用方决定要不要提示
 export async function fetchModels(
   options: FetchModelsOptions,
@@ -251,7 +262,8 @@ export async function fetchModels(
 
   let response: Response;
   try {
-    response = await fetchImpl(resolveModelsUrl(config.baseUrl), {
+    const query = CHAT_MODELS_QUERY[config.provider] ?? "";
+    response = await fetchImpl(resolveModelsUrl(config.baseUrl) + query, {
       method: "GET",
       headers: { Authorization: `Bearer ${config.apiKey}` },
       signal,

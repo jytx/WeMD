@@ -2,6 +2,7 @@ import { describe, expect, it, vi } from "vitest";
 
 import {
   AiRequestError,
+  fetchModels,
   isChatModel,
   streamChatCompletion,
   testConnection,
@@ -344,9 +345,13 @@ describe("模型筛选", () => {
       "dall-e-3",
       "Kwai-Kolors/Kolors",
       "stable-diffusion-xl",
+      "black-forest-labs/FLUX.1-schnell",
+      "FLUX.2-dev",
       "deepseek-ai/DeepSeek-OCR",
       "stepfun-ai/GOT-OCR2_0",
       "omni-moderation-latest",
+      "qwen-mt-flash",
+      "qwen-mt-plus",
     ]) {
       expect(isChatModel({ id }), id).toBe(false);
     }
@@ -368,6 +373,45 @@ describe("模型筛选", () => {
     ]) {
       expect(isChatModel({ id }), id).toBe(true);
     }
+  });
+
+  it("硅基流动、模力方舟按官方参数只请求对话模型，其他服务商不带筛选参数", async () => {
+    const fetchImpl = vi.fn(
+      async () =>
+        ({
+          ok: true,
+          status: 200,
+          json: async () => ({ data: [{ id: "DeepSeek-V4-Flash" }] }),
+        }) as Response,
+    );
+    const urlOf = (call: number) =>
+      (fetchImpl.mock.calls[call] as unknown as [string])[0];
+
+    const models = await fetchModels({
+      config: {
+        ...config,
+        provider: "moark",
+        baseUrl: "https://api.moark.com/v1",
+      },
+      fetchImpl: fetchImpl as unknown as typeof fetch,
+    });
+    await fetchModels({
+      config: {
+        ...config,
+        provider: "siliconflow",
+        baseUrl: "https://api.siliconflow.cn/v1",
+      },
+      fetchImpl: fetchImpl as unknown as typeof fetch,
+    });
+    await fetchModels({
+      config,
+      fetchImpl: fetchImpl as unknown as typeof fetch,
+    });
+
+    expect(models).toEqual(["DeepSeek-V4-Flash"]);
+    expect(urlOf(0)).toBe("https://api.moark.com/v1/models?type=text2text");
+    expect(urlOf(1)).toBe("https://api.siliconflow.cn/v1/models?sub_type=chat");
+    expect(urlOf(2)).toBe("https://api.deepseek.com/v1/models");
   });
 });
 

@@ -1,9 +1,9 @@
 export type AiProviderId =
   | "deepseek"
-  | "zhipu"
   | "moonshot"
   | "qwen"
   | "siliconflow"
+  | "moark"
   | "openai"
   | "openrouter"
   | "custom";
@@ -54,14 +54,6 @@ export const AI_PROVIDER_PRESETS: AiProviderPreset[] = [
     apiKeyUrl: "https://platform.deepseek.com/api_keys",
   },
   {
-    id: "zhipu",
-    label: "智谱",
-    mark: "智",
-    baseUrl: "https://open.bigmodel.cn/api/paas/v4",
-    defaultModel: "glm-4-flash",
-    apiKeyUrl: "https://open.bigmodel.cn/usercenter/apikeys",
-  },
-  {
     id: "moonshot",
     label: "Kimi",
     mark: "K",
@@ -84,6 +76,14 @@ export const AI_PROVIDER_PRESETS: AiProviderPreset[] = [
     baseUrl: "https://api.siliconflow.cn/v1",
     defaultModel: "Qwen/Qwen2.5-7B-Instruct",
     apiKeyUrl: "https://cloud.siliconflow.cn/account/ak",
+  },
+  {
+    id: "moark",
+    label: "模力方舟",
+    mark: "方",
+    baseUrl: "https://api.moark.com/v1",
+    defaultModel: "DeepSeek-V4-Flash",
+    apiKeyUrl: "https://moark.com/dashboard/tokens",
   },
   {
     id: "openai",
@@ -166,8 +166,15 @@ function normalizeStore(raw: unknown): AiConfigStore {
     }
   }
 
-  // 旧版把 Key 平铺存在顶层，迁移到当前服务商名下
-  if (!stored && (source.apiKey || source.model || source.baseUrl)) {
+  // 旧版把 Key 平铺存在顶层，迁移到当前服务商名下；
+  // 服务商已下线时 provider 会退回默认值，不能把别家的 Key 挂过去发给默认服务商
+  const providerKnown =
+    source.provider === undefined || source.provider === provider;
+  if (
+    !stored &&
+    providerKnown &&
+    (source.apiKey || source.model || source.baseUrl)
+  ) {
     providers[provider] = {
       baseUrl: text(source.baseUrl),
       apiKey: text(source.apiKey),
@@ -176,7 +183,8 @@ function normalizeStore(raw: unknown): AiConfigStore {
   }
 
   return {
-    enabled: source.enabled === true,
+    // 服务商已下线时关闭开关，等用户自己选好下一家再启用，不能静默改发给别家
+    enabled: source.enabled === true && providerKnown,
     provider,
     preference: text(source.preference),
     providers,
@@ -270,7 +278,6 @@ function disableThinkingParams(config: AiConfig): Record<string, unknown> {
 
   switch (config.provider) {
     case "deepseek":
-    case "zhipu":
       return { thinking: { type: "disabled" } };
 
     // 阿里云文档明确：不支持该参数的模型收到也不报错

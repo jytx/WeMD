@@ -170,16 +170,56 @@ describe("各服务商配置互相隔离", () => {
       AI_CONFIG_STORAGE_KEY,
       JSON.stringify({
         enabled: true,
-        provider: "zhipu",
+        provider: "moonshot",
         apiKey: "sk-old",
+        model: "moonshot-v1-8k",
+        baseUrl: "https://api.moonshot.cn/v1",
+      }),
+    );
+
+    expect(getAiConfig().apiKey).toBe("sk-old");
+    expect(getProviderConfig("moonshot").apiKey).toBe("sk-old");
+    expect(getProviderConfig("deepseek").apiKey).toBe("");
+  });
+
+  it("已下线服务商的旧配置退回默认服务商，且不把它的 Key 发给默认服务商", () => {
+    localStorage.setItem(
+      AI_CONFIG_STORAGE_KEY,
+      JSON.stringify({
+        enabled: true,
+        provider: "zhipu",
+        apiKey: "sk-zhipu",
         model: "glm-4-flash",
         baseUrl: "https://open.bigmodel.cn/api/paas/v4",
       }),
     );
 
-    expect(getAiConfig().apiKey).toBe("sk-old");
-    expect(getProviderConfig("zhipu").apiKey).toBe("sk-old");
-    expect(getProviderConfig("deepseek").apiKey).toBe("");
+    const config = getAiConfig();
+    expect(config.provider).toBe("deepseek");
+    expect(config.apiKey).toBe("");
+    expect(config.baseUrl).toBe("https://api.deepseek.com/v1");
+  });
+
+  it("当前服务商下线后关闭开关，不静默改用其他已保存的服务商", () => {
+    localStorage.setItem(
+      AI_CONFIG_STORAGE_KEY,
+      JSON.stringify({
+        enabled: true,
+        provider: "zhipu",
+        preference: "保留原文语气",
+        providers: {
+          deepseek: { apiKey: "sk-ds", model: "deepseek-chat" },
+          zhipu: { apiKey: "sk-zhipu", model: "glm-4-flash" },
+        },
+      }),
+    );
+
+    const config = getAiConfig();
+    expect(config.provider).toBe("deepseek");
+    expect(config.apiKey).toBe("sk-ds");
+    expect(config.enabled).toBe(false);
+    expect(isAiRewriteReady(config)).toBe(false);
+    expect(config.preference).toBe("保留原文语气");
   });
 });
 
@@ -194,16 +234,6 @@ describe("服务商专属参数", () => {
     expect(
       buildProviderExtras({ ...completeConfig, provider: "siliconflow" }),
     ).toEqual({ enable_thinking: false });
-  });
-
-  it("智谱与 DeepSeek 同为 thinking.type=disabled", () => {
-    expect(
-      buildProviderExtras({
-        ...completeConfig,
-        provider: "zhipu",
-        model: "glm-4.7",
-      }),
-    ).toEqual({ thinking: { type: "disabled" } });
   });
 
   it("Kimi 按模型细分：k2.5/k2.6 可关，其余不下发", () => {
