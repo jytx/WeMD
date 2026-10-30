@@ -31,6 +31,7 @@ import {
 } from "../../store/publishingPreferences";
 import { SyntaxHelpPopover } from "./SyntaxHelpPopover";
 import { AiOptimizeButtons } from "./AiOptimize/AiOptimizeButtons";
+import { FormatMenu } from "./FormatMenu";
 import { ToolbarCompactMenu } from "./ToolbarCompactMenu";
 import "./Toolbar.css";
 
@@ -409,6 +410,7 @@ export function Toolbar({ onInsert }: ToolbarProps) {
           <WrapText size={16} />
         </button>
 
+        <FormatMenu />
         <SyntaxHelpPopover />
 
         <div className="md-toolbar-divider" />

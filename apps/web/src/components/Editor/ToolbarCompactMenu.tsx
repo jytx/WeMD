@@ -17,6 +17,7 @@ import {
 } from "./toolbarConfigs";
 import { SyntaxHelpPopover } from "./SyntaxHelpPopover";
 import { AiOptimizeButtons } from "./AiOptimize/AiOptimizeButtons";
+import { FormatRules } from "./FormatMenu";
 import "./Toolbar.css";
 
 interface ToolbarCompactMenuProps {
@@ -152,6 +153,8 @@ export function ToolbarCompactMenu({
             <WrapText size={14} />
             <span>{tableWrap ? "关闭表格自动换行" : "开启表格自动换行"}</span>
           </button>
+          <div className="toolbar-compact-divider" />
+          <FormatRules />
           <div className="toolbar-compact-divider" />
           <div className="toolbar-compact-ai">
             <AiOptimizeButtons />

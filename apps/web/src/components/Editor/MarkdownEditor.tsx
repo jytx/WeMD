@@ -3,6 +3,7 @@ import { EditorView, minimalSetup } from "codemirror";
 import { markdown, markdownLanguage } from "@codemirror/lang-markdown";
 import { languages } from "@codemirror/language-data";
 import { EditorState } from "@codemirror/state";
+import { isolateHistory } from "@codemirror/commands";
 import {
   editorBaseThemeDark,
   editorBaseThemeLight,
@@ -29,6 +30,7 @@ import toast from "react-hot-toast";
 import "./MarkdownEditor.css";
 import { customKeymap } from "./editorShortcuts";
 import { paragraphSelectionStyle } from "./mouseSelectionStyle";
+import { docSyncChanges } from "./docSync";
 import {
   WECHAT_IMAGE_MAX_SIZE_BYTES,
   formatImageSize,
@@ -270,8 +272,10 @@ export function MarkdownEditor({ onScrollSyncReady }: MarkdownEditorProps) {
     if (!view) return;
     const currentDoc = view.state.doc.toString();
     if (currentDoc === content) return;
+    // 外部改动（切换文件、格式化）单独成为一步撤销，不与刚输入的文字合并
     view.dispatch({
-      changes: { from: 0, to: view.state.doc.length, insert: content },
+      changes: docSyncChanges(currentDoc, content),
+      annotations: isolateHistory.of("full"),
     });
   }, [content]);
 
