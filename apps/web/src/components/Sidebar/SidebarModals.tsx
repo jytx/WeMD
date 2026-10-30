@@ -1,5 +1,6 @@
 import { createPortal } from "react-dom";
 import type { FileItem, FolderItem } from "../../store/fileTypes";
+import { handleConfirmKeydown } from "../../utils/confirmKeydown";
 
 interface DeleteFileModalProps {
   target: FileItem;
@@ -128,10 +129,7 @@ export function RenameFolderModal({
           placeholder="输入文件夹名称"
           value={value}
           onChange={(e) => onChange(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") onConfirm();
-            if (e.key === "Escape") onCancel();
-          }}
+          onKeyDown={(e) => handleConfirmKeydown(e, onConfirm, onCancel)}
           autoFocus
         />
         <div className="fs-confirm-actions">
@@ -171,10 +169,7 @@ export function NewFolderModal({
           placeholder="输入文件夹名称"
           value={value}
           onChange={(e) => onChange(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") onConfirm();
-            if (e.key === "Escape") onCancel();
-          }}
+          onKeyDown={(e) => handleConfirmKeydown(e, onConfirm, onCancel)}
           autoFocus
         />
         <div className="fs-confirm-actions">

@@ -15,6 +15,7 @@ import {
   stripMarkdownExtension,
 } from "../../utils/markdownFileMeta";
 import { resolveNewArticleThemeSnapshot } from "../../utils/newArticleTheme";
+import { handleConfirmKeydown } from "../../utils/confirmKeydown";
 
 function getFileTitle(file: StorageFileItem): string {
   const fromMeta =
@@ -275,10 +276,11 @@ export function FileSystemHistory({ adapter }: FileSystemHistoryProps) {
                         <input
                           value={renameValue}
                           onChange={(e) => setRenameValue(e.target.value)}
-                          onKeyDown={(e) => {
-                            if (e.key === "Enter") submitRename();
-                            if (e.key === "Escape") setRenamingPath(null);
-                          }}
+                          onKeyDown={(e) =>
+                            handleConfirmKeydown(e, submitRename, () =>
+                              setRenamingPath(null),
+                            )
+                          }
                           autoFocus
                         />
                         <button onClick={submitRename}>确认</button>

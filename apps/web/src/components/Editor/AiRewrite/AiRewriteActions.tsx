@@ -8,6 +8,7 @@ import {
   type RewriteActionId,
   type ToneId,
 } from "../../../services/ai/aiPrompts";
+import { isComposingKeydown } from "../../../utils/confirmKeydown";
 
 interface AiRewriteActionsProps {
   onRun: (
@@ -82,7 +83,7 @@ export function AiRewriteActions({ onRun }: AiRewriteActionsProps) {
           aria-label="自定义要求"
           onChange={(event) => setInstruction(event.target.value)}
           onKeyDown={(event) => {
-            if (event.key === "Enter") {
+            if (event.key === "Enter" && !isComposingKeydown(event)) {
               event.preventDefault();
               submitCustom();
             }

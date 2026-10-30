@@ -27,6 +27,7 @@ import {
 import { FileSidebarWorkspaceHeader } from "./FileSidebarWorkspaceHeader";
 import { FolderCollapse } from "./FolderCollapse";
 import "./FileSidebar.css";
+import { handleConfirmKeydown } from "../../utils/confirmKeydown";
 
 import type { FileItem, FolderItem, TreeItem } from "../../store/fileTypes";
 
@@ -86,10 +87,11 @@ export function FileSidebar() {
               <input
                 value={state.renameValue}
                 onChange={(e) => state.setRenameValue(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") state.submitRename();
-                  if (e.key === "Escape") state.setRenamingPath(null);
-                }}
+                onKeyDown={(e) =>
+                  handleConfirmKeydown(e, state.submitRename, () =>
+                    state.setRenamingPath(null),
+                  )
+                }
                 autoFocus
               />
               <button onClick={() => state.submitRename()}>确认</button>

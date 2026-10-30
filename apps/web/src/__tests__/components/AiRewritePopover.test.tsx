@@ -81,6 +81,21 @@ describe("改写弹窗", () => {
     }
   });
 
+  it("自定义要求在输入法组词时按回车不提交，组词结束后回车才提交", async () => {
+    mocked.streamChatCompletion.mockImplementation(() => new Promise(() => {}));
+    renderPopover();
+    const input = screen.getByLabelText("自定义要求");
+    fireEvent.change(input, { target: { value: "改成正式语气" } });
+
+    fireEvent.keyDown(input, { key: "Enter", isComposing: true });
+    fireEvent.keyDown(input, { key: "Enter", keyCode: 229 });
+    expect(screen.getByLabelText("自定义要求")).toBeInTheDocument();
+    expect(mocked.streamChatCompletion).not.toHaveBeenCalled();
+
+    fireEvent.keyDown(input, { key: "Enter" });
+    await waitFor(() => expect(mocked.streamChatCompletion).toHaveBeenCalled());
+  });
+
   it("流式过程中展示增量文本并可停止", async () => {
     let emit: ((delta: string) => void) | undefined;
     mocked.streamChatCompletion.mockImplementation(
