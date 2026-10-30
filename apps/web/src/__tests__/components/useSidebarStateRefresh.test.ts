@@ -51,6 +51,7 @@ describe("useSidebarState 刷新入口", () => {
     vi.stubGlobal("localStorage", mocks.localStorage);
     mocks.useFileSystemResult.workspacePath = "/workspace";
     mocks.useFileSystemResult.workspaceRevision = 0;
+    mocks.useFileSystemResult.files = [];
   });
 
   afterEach(() => {
@@ -119,5 +120,25 @@ describe("useSidebarState 刷新入口", () => {
       expect(result.current.filter).toBe("");
       expect(result.current.activeFolder).toBeNull();
     });
+  });
+
+  it("全部折叠后新建文章不会落进已折叠的文件夹", () => {
+    const now = new Date();
+    const folder = {
+      name: "drafts",
+      path: "/workspace/drafts",
+      createdAt: now,
+      updatedAt: now,
+      isDirectory: true as const,
+      children: [],
+    };
+    mocks.useFileSystemResult.files = [folder] as never[];
+    const { result } = renderHook(() => useSidebarState());
+
+    act(() => result.current.setActiveFolder(folder.path));
+    act(() => result.current.toggleAllFolders());
+
+    expect(result.current.allFoldersCollapsed).toBe(true);
+    expect(result.current.activeFolder).toBeNull();
   });
 });

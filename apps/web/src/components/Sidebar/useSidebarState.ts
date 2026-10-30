@@ -160,6 +160,21 @@ export function useSidebarState() {
     });
   }, []);
 
+  // 有任一文件夹展开时全部折叠，否则全部展开
+  const allFoldersCollapsed =
+    allFolders.length > 0 &&
+    allFolders.every((folder) => collapsedFolders.has(folder.path));
+
+  const toggleAllFolders = useCallback(() => {
+    const next = allFoldersCollapsed
+      ? new Set<string>()
+      : new Set(allFolders.map((folder) => folder.path));
+    // 与单个折叠一致：被折叠的文件夹不再作为新建文章的目标
+    if (!allFoldersCollapsed) setActiveFolder(null);
+    setCollapsedFolders(next);
+    saveCollapsedState(next);
+  }, [allFolders, allFoldersCollapsed]);
+
   const updateFolderPathState = useCallback(
     (oldPath: string, newPath: string) => {
       setActiveFolder((current) => {
@@ -513,6 +528,8 @@ export function useSidebarState() {
     handleSetSortMode,
 
     toggleFolder,
+    allFoldersCollapsed,
+    toggleAllFolders,
     getFolderMoveTargets,
     closeMenu,
     handleContextMenu,

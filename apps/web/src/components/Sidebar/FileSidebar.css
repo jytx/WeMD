@@ -390,7 +390,7 @@
 
 .fs-folder-icon {
   flex: none;
-  transition: transform 150ms ease;
+  transition: transform 220ms cubic-bezier(0.25, 1, 0.5, 1);
 }
 
 .fs-folder-icon.expanded {
@@ -405,6 +405,57 @@
   color: var(--text-tertiary);
   font-size: 9px;
   text-align: center;
+}
+
+/* 展开/折叠：高度用 grid 0fr↔1fr 过渡，内容只动 opacity/transform（合成层） */
+.fs-collapse {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 220ms cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.fs-collapse.open {
+  grid-template-rows: 1fr;
+}
+
+.fs-collapse-inner {
+  min-height: 0;
+  overflow: hidden;
+}
+
+.fs-collapse-inner > * {
+  opacity: 0;
+  transform: translateY(-4px);
+  transition:
+    opacity 160ms ease,
+    transform 220ms cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.fs-collapse.open > .fs-collapse-inner > * {
+  opacity: 1;
+  transform: none;
+}
+
+.fs-toggle-all-icons {
+  display: grid;
+}
+
+.fs-toggle-all-icons > svg {
+  grid-area: 1 / 1;
+  transition:
+    opacity 160ms ease,
+    transform 220ms cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.fs-toggle-all-icons .fs-icon-expand,
+.fs-toggle-all-icons.collapsed .fs-icon-collapse {
+  opacity: 0;
+  transform: rotate(-90deg) scale(0.6);
+}
+
+.fs-toggle-all-icons.collapsed .fs-icon-expand {
+  opacity: 1;
+  transform: none;
 }
 
 .fs-folder-children {

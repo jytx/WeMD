@@ -1,5 +1,12 @@
 import { useEffect, useRef, useState } from "react";
-import { ArrowUpDown, Check, FolderInput, FolderOpen } from "lucide-react";
+import {
+  ArrowUpDown,
+  Check,
+  ChevronsDownUp,
+  ChevronsUpDown,
+  FolderInput,
+  FolderOpen,
+} from "lucide-react";
 import {
   ROOT_DROP_TARGET,
   getBaseName,
@@ -50,6 +57,8 @@ export function FileSidebarWorkspaceHeader({
     };
   }, [showSortMenu]);
 
+  const toggleAllLabel = state.allFoldersCollapsed ? "全部展开" : "全部折叠";
+
   return (
     <div className="fs-header">
       <button
@@ -84,6 +93,25 @@ export function FileSidebarWorkspaceHeader({
         >
           <FolderInput size={14} />
         </button>
+        {state.allFolders.length > 0 && !state.filter && (
+          <button
+            type="button"
+            className="fs-btn-secondary fs-btn-icon-only"
+            onClick={state.toggleAllFolders}
+            aria-label={toggleAllLabel}
+            onMouseEnter={(event) => state.showTooltip(event, toggleAllLabel)}
+            onMouseLeave={state.hideTooltip}
+            onFocus={(event) => state.showTooltip(event, toggleAllLabel)}
+            onBlur={state.hideTooltip}
+          >
+            <span
+              className={`fs-toggle-all-icons ${state.allFoldersCollapsed ? "collapsed" : ""}`}
+            >
+              <ChevronsDownUp size={14} className="fs-icon-collapse" />
+              <ChevronsUpDown size={14} className="fs-icon-expand" />
+            </span>
+          </button>
+        )}
         <div className="fs-sort-wrapper">
           <button
             ref={sortBtnRef}

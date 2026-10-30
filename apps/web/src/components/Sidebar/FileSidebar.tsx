@@ -25,6 +25,7 @@ import {
   FOLDER_DRAG_TYPE,
 } from "./useSidebarState";
 import { FileSidebarWorkspaceHeader } from "./FileSidebarWorkspaceHeader";
+import { FolderCollapse } from "./FolderCollapse";
 import "./FileSidebar.css";
 
 import type { FileItem, FolderItem, TreeItem } from "../../store/fileTypes";
@@ -168,15 +169,17 @@ export function FileSidebar() {
           <span className="fs-folder-name">{folder.name}</span>
           <span className="fs-folder-count">{folder.children.length}</span>
         </div>
-        {!isCollapsed && (
-          <div className="fs-folder-children">
-            {folder.children.map((child) =>
-              child.isDirectory
-                ? renderFolderItem(child as FolderItem)
-                : renderFileItem(child as FileItem),
-            )}
-          </div>
-        )}
+        <FolderCollapse open={!isCollapsed}>
+          {() => (
+            <div className="fs-folder-children">
+              {folder.children.map((child) =>
+                child.isDirectory
+                  ? renderFolderItem(child as FolderItem)
+                  : renderFileItem(child as FileItem),
+              )}
+            </div>
+          )}
+        </FolderCollapse>
       </div>
     );
   };
