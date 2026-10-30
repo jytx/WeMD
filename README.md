@@ -1,101 +1,91 @@
 <p align="center">
-  <img src="apps/web/public/favicon-dark.svg" width="80" height="80" alt="WeMD Logo" />
+  <img src="apps/web/public/favicon-dark.svg" width="72" height="72" alt="WeMD" />
 </p>
 
 <h1 align="center">WeMD</h1>
 
 <p align="center">
-  <strong>更优雅的 Markdown 公众号排版工具</strong>
+  用 Markdown 写公众号，复制即排好版。<br>
+  本地优先，无需登录，开源免费。
 </p>
 
 <p align="center">
-  告别复杂工具。Markdown 写作，一键复制到公众号。<br>
-  专为公众号创作者设计的<b>本地优先</b>编辑器。
+  <a href="https://edit.wemd.app">在线使用</a> ·
+  <a href="https://github.com/tenngoxars/WeMD/releases/latest">下载桌面版</a> ·
+  <a href="https://wemd.app/docs">使用文档</a> ·
+  <a href="https://wemd.app">官网</a>
 </p>
 
 <p align="center">
-  <a href="https://wemd.app">🌐 官网</a> •
-  <a href="https://edit.wemd.app">✏️ 在线使用</a> •
-  <a href="https://wemd.app/docs">📖 文档</a> •
-  <a href="https://github.com/tenngoxars/WeMD/releases">📦 下载桌面版</a>
+  <a href="https://github.com/tenngoxars/WeMD/releases/latest"><img src="https://img.shields.io/github/v/release/tenngoxars/WeMD?label=%E6%9C%80%E6%96%B0%E7%89%88%E6%9C%AC&color=047857" alt="最新版本" /></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-047857" alt="MIT License" /></a>
 </p>
 
-<p align="center">
-  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-4CAF50?style=for-the-badge" alt="License: MIT" /></a>
-  <img src="https://img.shields.io/badge/React-18-61DAFB?style=for-the-badge&logo=react&logoColor=black" alt="React 18" />
-  <img src="https://img.shields.io/badge/TypeScript-5-3178C6?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript 5" />
-  <img src="https://img.shields.io/badge/Electron-28-47848F?style=for-the-badge&logo=electron&logoColor=white" alt="Electron" />
-  <img src="https://img.shields.io/badge/pnpm-9-F69220?style=for-the-badge&logo=pnpm&logoColor=white" alt="pnpm" />
-</p>
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset=".github/assets/screenshot-dark.webp" />
+  <img src=".github/assets/screenshot-light.webp" alt="WeMD 编辑器界面：左侧 Markdown 源码，右侧公众号排版预览" />
+</picture>
 
----
+## 功能
 
-## ✨ 特性
+**写作**
 
-|     | 功能              | 说明                                                   |
-| --- | ----------------- | ------------------------------------------------------ |
-| 📝  | **Markdown 语法** | 支持 GFM、表格、代码高亮、数学公式                     |
-| 🎨  | **主题切换**      | 内置多款文章主题，支持可视化设计器或自定义 CSS         |
-| 📋  | **一键复制**      | 针对微信公众号粘贴适配，尽量保持预览效果               |
-| 📄  | **复制 HTML**     | 支持复制排版后的 HTML 内容，适配更多编辑场景           |
-| 🧾  | **导出长图**      | 按手机宽度把排版结果导出为 PNG 长图，所见即所得        |
-| 🖼️  | **多图床支持**    | 官方图床 / 七牛云 / 阿里云 / 腾讯云 / S3 兼容          |
-| 💾  | **本地优先**      | 数据存储在本地，无需登录，隐私安全                     |
-| ✨  | **一键格式化**    | 中英文加空格、标点全角、直角引号、清理空白，规则可开关 |
-| 📱  | **跨平台**        | Web 端 + 桌面端（macOS / Windows / Linux）             |
-| 📲  | **PWA 支持**      | Web 端可安装到桌面/主屏，支持离线写作                  |
-| 🌙  | **界面风格**      | 亮色 / 深色 双模式可选                                 |
-| 👁️  | **深色模式预览**  | 预览微信深色模式效果，还原度达 98%+                    |
-| 🔍  | **高级搜索**      | 支持正则匹配、全词匹配、批量替换                       |
-| 🎞️  | **滑动图组**      | 支持水平滑动的多图展示组件，丰富视觉体验               |
-| 📊  | **Mermaid 图表**  | 内置流程图、时序图、甘特图等多种图表，自动适配主题配色 |
+- 支持 GFM、表格、代码高亮、数学公式、Mermaid 图表和滑动图组
+- 一键格式化：中英文之间加空格、标点转全角、引号转直角引号「」、清理多余空白，每条规则可单独开关
+- 搜索替换支持正则和全词匹配
 
----
+**排版**
 
-## 💡 技术亮点
+- 内置十余款文章主题，可用可视化设计器调整，也可直接写 CSS
+- 预览公众号深色模式下的效果，还原度达 98% 以上（[算法原理](https://wemd.app/docs/reference/dark-mode-algorithm.html)）
+- 界面支持亮色和深色两种模式
 
-### 微信深色模式预览算法
+**AI 写作辅助**
 
-WeMD 内置了一套**色彩语义保全算法**，可在编辑器中预览微信公众号深色模式下的实际效果，还原度达 **98% 以上**。
+- 选中一段文字改写：润色、精简、口语化、换语气，或输入自定义要求
+- 全文审阅：从开头、结构、节奏、表达和结尾五个方面给出修改建议
+- 起标题：按多个方向生成标题候选
+- 填入自己的 API Key 即可使用，请求从浏览器直接发到服务商，不经过 WeMD。支持 DeepSeek、Kimi、通义千问、硅基流动、模力方舟、OpenAI、OpenRouter 和自定义 OpenAI 兼容服务
 
-> 该算法基于微信官方开源的 [wechatjs/mp-darkmode](https://github.com/wechatjs/mp-darkmode) 核心算法迁移并优化，旨在保证高性能 CSS 转换的同时提供最接近官方的渲染效果。
+**发布**
 
-- 智能识别不同元素类型，分别优化
-- HSL 色彩空间计算，确保视觉一致性
+- 一键复制到公众号，粘贴后尽量保持预览效果
+- 导出 HTML，或按手机宽度导出 PNG 长图
+- 图床支持官方图床、七牛云、阿里云、腾讯云和 S3 兼容服务
 
-这（可能）是目前市面上除官方外唯一针对微信公众号深色模式预览的开源解决方案。
+**本地优先**
 
-👉 **[查看算法详细原理解析](https://wemd.app/docs/reference/dark-mode-algorithm.html)** | **[查看算法源码](packages/core/src/wechatDarkMode.ts)**
+- 文章存放在浏览器或你选择的本地文件夹里，无需注册登录
+- 本地文件夹模式支持多级目录，文件树可一键展开或折叠
 
----
-
-## 🚀 快速开始
+## 开始使用
 
 ### 在线使用
 
-直接访问 **[edit.wemd.app](https://edit.wemd.app)** 即可开始写作，无需安装，同样支持纯本地存储。
+打开 [edit.wemd.app](https://edit.wemd.app) 即可写作，文章只保存在本地。
 
-Web 端支持 **PWA**：在 Chrome / Edge 地址栏点击安装图标，可将 WeMD 安装到桌面或手机主屏，安装后支持离线打开与写作（图床上传仍需要网络）。
+网页版支持 PWA：在 Chrome 或 Edge 地址栏点击安装图标，就能把 WeMD 安装到桌面或手机主屏，安装后可离线写作（上传图片仍需联网）。
 
-### 桌面版下载
+### 桌面版
 
-前往 [Releases](https://github.com/tenngoxars/WeMD/releases) 下载对应平台安装包：
+从 [Releases](https://github.com/tenngoxars/WeMD/releases/latest) 下载对应平台的安装包：
 
-- **macOS**：`WeMD-<版本号>-arm64-mac.zip`（Apple Silicon）
-- **Windows**：`WeMD.Setup.<版本号>.exe`
-- **Linux**：`WeMD-<版本号>.AppImage`
+| 平台                   | 安装包                        |
+| ---------------------- | ----------------------------- |
+| macOS（Apple Silicon） | `WeMD-<版本号>-arm64-mac.zip` |
+| Windows                | `WeMD.Setup.<版本号>.exe`     |
+| Linux                  | `WeMD-<版本号>.AppImage`      |
 
-> 当前自动发布的 macOS 安装包为 Apple Silicon 版本；Intel Mac 可优先使用在线版或自行从源码构建。
+Intel Mac 暂无安装包，可以使用网页版或从源码构建。
 
-> ⚠️ **macOS 用户注意**：首次打开时如提示"应用已损坏"，请在终端执行：
->
-> ```bash
-> xattr -cr /Applications/WeMD.app
-> ```
->
-> ⚠️ **Windows 用户注意**：如 SmartScreen 提示"未知发布者"，点击「更多信息」→「仍要运行」
->
-> ⚠️ **Linux 用户注意**：运行前需设置可执行权限：`chmod +x WeMD.AppImage`
+<details>
+<summary>首次打开遇到提示？</summary>
+
+- **macOS 提示「应用已损坏」**：在终端执行 `xattr -cr /Applications/WeMD.app`
+- **Windows 提示「未知发布者」**：点击「更多信息」，再点「仍要运行」
+- **Linux 无法运行**：先设置可执行权限 `chmod +x WeMD-<版本号>.AppImage`
+
+</details>
 
 ### Docker 部署
 
@@ -104,10 +94,7 @@ docker compose pull
 docker compose up -d
 ```
 
-访问 `http://localhost:8080` 即可使用。
-
-默认会拉取 `ghcr.io/tenngoxars/wemd-web:latest`。  
-如需指定版本镜像，可覆盖环境变量：
+启动后访问 `http://localhost:8080`。默认使用 `ghcr.io/tenngoxars/wemd-web:latest` 镜像，需要固定版本时：
 
 ```bash
 WEMD_IMAGE=ghcr.io/tenngoxars/wemd-web:<版本号> docker compose up -d
@@ -121,92 +108,25 @@ WEMD_IMAGE=ghcr.io/tenngoxars/wemd-web:<版本号> docker compose up -d
 - **部署在服务器上，有域名**：用 Caddy、Nginx 等反向代理配置 HTTPS。
 - **只在局域网使用，没有域名**：在 Chrome 打开 `chrome://flags/#unsafely-treat-insecure-origin-as-secure`，填入 `http://服务器IP:8080` 并重启浏览器。每台电脑需单独设置。
 
----
+## 参与开发
 
-## 🛠️ 本地开发
+欢迎提交 [Issue](https://github.com/tenngoxars/WeMD/issues) 和 Pull Request。本地开发、项目结构和提交前检查见 [贡献指南](CONTRIBUTING.md)。
 
-### 环境要求
-
-- Node.js ≥ 18
-- pnpm ≥ 9（推荐 `corepack enable pnpm`）
-
-### 安装与运行
-
-```bash
-# 安装依赖
-pnpm install
-
-# 启动 Web 开发服务器
-pnpm dev:web
-
-# 启动桌面端（会先启动 Web，再启动 Electron）
-pnpm dev:desktop
-```
-
-### 构建
-
-```bash
-# 构建 Web
-pnpm --filter @wemd/web build
-
-# 构建桌面应用
-pnpm --filter wemd-electron run build:mac  # macOS
-pnpm --filter wemd-electron run build:win  # Windows
-```
-
----
-
-## 📁 项目结构
-
-```
-WeMD/
-├── apps/
-│   ├── web/        # React + Vite 前端
-│   ├── electron/   # Electron 桌面端
-│   └── server/     # NestJS 图片上传服务
-├── packages/
-│   └── core/       # Markdown 解析 / 主题 / 工具
-├── templates/      # 主题 CSS 模板
-├── scripts/        # 开发与构建辅助脚本
-├── .github/        # CI、Docker 镜像与发布工作流
-└── turbo.json      # Turborepo 配置
-```
-
----
-
-## 📸 截图
-
-![screenshot](.github/assets/screenshot.png)
-
----
-
-## 💬 反馈与贡献
-
-如有问题或建议，欢迎提交 [Issue](https://github.com/tenngoxars/WeMD/issues)。
-
-WeMD 已开放外部贡献。准备提交代码前，请先阅读 [贡献指南](CONTRIBUTING.md)，确认本地开发环境、改动边界和必要检查项。
-
----
-
-## ❤️ 支持 WeMD
+## 支持 WeMD
 
 WeMD 会继续保持免费、开源。目前官方图床的免费存储空间逐渐吃紧，如果这个项目对你有所帮助，欢迎通过微信或支付宝自愿支持。收到的支持将优先用于图片存储、带宽及项目持续维护。
 
 <p align="center">
-  <img src=".github/assets/wechat-pay.jpg" width="260" alt="微信支付收款码" />
-  <img src=".github/assets/alipay.jpg" width="260" alt="支付宝收款码" />
+  <img src=".github/assets/wechat-pay.jpg" width="220" alt="微信支付收款码" />
+  <img src=".github/assets/alipay.jpg" width="220" alt="支付宝收款码" />
 </p>
 
 感谢每一份支持，也请量力而行。
 
----
+## 致谢
 
-## 🤝 致谢
+深色模式预览算法参考了微信官方开源的 [wechatjs/mp-darkmode](https://github.com/wechatjs/mp-darkmode)，感谢微信团队。
 
-本项目的微信深色模式预览算法深度参考了微信官方开源的 [wechatjs/mp-darkmode](https://github.com/wechatjs/mp-darkmode) 核心逻辑。感谢微信团队为开发者提供的优秀解决方案！
-
----
-
-## 📄 License
+## License
 
 [MIT](LICENSE) © WeMD Team

@@ -10,16 +10,44 @@
 
 ## 本地环境
 
+需要 Node.js 22（与 CI 一致）和 pnpm 9，推荐用 `corepack enable pnpm` 启用 pnpm。
+
 ```bash
-corepack enable pnpm
 pnpm install
+
+# 启动 Web 开发服务器（http://localhost:5173）
 pnpm dev:web
+
+# 启动桌面端：会先启动 Web 服务，就绪后再启动 Electron
+pnpm dev:desktop
 ```
 
-桌面端开发需要先启动 Web 服务，再运行：
+构建：
 
 ```bash
-pnpm dev:desktop
+# Web
+pnpm --filter @wemd/web build
+
+# 桌面安装包
+pnpm --filter wemd-electron run build:mac
+pnpm --filter wemd-electron run build:win
+pnpm --filter wemd-electron run build:linux
+```
+
+## 项目结构
+
+```
+WeMD/
+├── apps/
+│   ├── web/        # React + Vite 前端
+│   ├── electron/   # Electron 桌面端
+│   └── server/     # NestJS 图片上传服务
+├── packages/
+│   └── core/       # Markdown 解析、主题与公共工具
+├── templates/      # 主题 CSS 模板
+├── scripts/        # 开发与构建辅助脚本
+├── .github/        # CI、Docker 镜像与发布工作流
+└── turbo.json      # Turborepo 配置
 ```
 
 ## 改动原则
